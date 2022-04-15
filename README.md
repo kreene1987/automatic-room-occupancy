@@ -35,7 +35,7 @@ Occupancy is cleared when ALL of the following conditions are met (all are optio
 
 ------OPTIONAL HELPERS------
 
-Uses the following helpers to allow for front end control of timeouts. All default to 10 minutes if not provided.
+Uses the following helpers to allow for front end control of timeouts. Defaults are as specified below:
 - input_number.door_occupancy_timeout (in minutes, default: 0)
 - input_number.media_occupancy_timeout (in minutes, default: 10)
 - input_number.motion_occupancy_timeout (in minutes, default: 10)
