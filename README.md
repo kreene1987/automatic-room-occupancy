@@ -3,7 +3,7 @@ Automatic Home Occupancy Home Assistant Blueprint
 
 Automatically turn on and off an ocupancy switch for a single room. 
 
-------LOGIC------ 
+------LOGIC------
 Occupied when ANY of the following conditions are met (all are optional).   
 	- door is shut   
 	- any motoion  
@@ -22,5 +22,5 @@ Uses the following helpers to allow for front end control of timeouts. All defau
   - input_number.media_occupancy_timeout
   - input_number.bluetooth_occupancy_timeout(NOT IN USE YET)
 
-------TODO------   
+------TODO------
 - Use bluetooth timeout input (Help needed)
