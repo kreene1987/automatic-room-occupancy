@@ -40,3 +40,8 @@ Uses the following helpers to allow for front end control of timeouts. Defaults 
 - input_number.media_occupancy_timeout (in minutes, default: 10)
 - input_number.motion_occupancy_timeout (in minutes, default: 10)
 - input_number.bluetooth_occupancy_timeout (NOT IN USE YET)
+
+------To-Do------
+
+When household group goes to "not_home" state, if guest is off: turn off occupancy input_boolean. 
+  Maybe also pause all media_players?
