@@ -234,8 +234,8 @@ action:
           - "{{ motion_is_timed_out }}"
           - "{% set t = (time_now - media_timeout) * 60 %} {% set ns = namespace(not_playing=[])\
             \ %} {% for player in media_players %}\n  {% for state in media_states %}\n\
-            \    {% if states[player].last_changed is defined %}\n      {% set timed_out\
-            \ = states[player].last_changed.timestamp() < t %}\n    {% else %}\n      {%\
+            \    {% if states[player].media_position_updated_at is defined %}\n      {% set timed_out\
+            \ = states[player].media_position_updated_at.timestamp() < t %}\n    {% else %}\n      {%\
             \ set timed_out = true %}\n    {% endif %}\n    {% if states(player) != state\
             \ and timed_out %}\n      {% set ns.not_playing = ns.not_playing + [ player.entity_id\
             \ ] %}\n    {% endif %}\n  {% endfor %}\n{% endfor %} {{ ns.not_playing | length\
