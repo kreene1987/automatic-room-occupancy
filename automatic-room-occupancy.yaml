@@ -32,7 +32,7 @@ blueprint:
         entity:
           domain: binary_sensor
           device_class: motion
-         multiple: true
+        multiple: true
     occupied_on_shut_door:
       name: Enable Door Occupancy
       description: Turn on/off occupancy via door sensor(s).
