@@ -32,6 +32,7 @@ blueprint:
         entity:
           domain: binary_sensor
           device_class: motion
+         multiple: true
     occupied_on_shut_door:
       name: Enable Door Occupancy
       description: Turn on/off occupancy via door sensor(s).
@@ -46,6 +47,7 @@ blueprint:
         entity:
           domain: binary_sensor
           device_class: opening
+        multiple: true
     occupied_on_media_enabled:
       name: Enable Media Occupancy
       description: Turn on/off occupancy via media player(s).
@@ -59,6 +61,7 @@ blueprint:
       selector:
         entity:
           domain: media_player
+        multiple: true
     media_states:
       name: Media State(s)
       description: Media player state(s) when room is occupied (comma separated).
@@ -76,7 +79,10 @@ blueprint:
       description: Room presence entity or entities (comma separated) to track.
       default: sensor.none
       selector:
-        text:
+        entity:
+          domain: sensor
+          device_class: motion
+        multiple: true
     presence_states:
       name: Presence State(s)
       description: A comma separated list of states that presence entity can match.
