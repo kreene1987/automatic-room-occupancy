@@ -81,7 +81,6 @@ blueprint:
       selector:
         entity:
           domain: sensor
-          device_class: motion
         multiple: true
     presence_states:
       name: Presence State(s)
