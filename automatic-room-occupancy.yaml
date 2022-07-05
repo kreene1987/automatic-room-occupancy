@@ -27,6 +27,7 @@ blueprint:
     motion_sensors:
       name: Motion Sensor(s)
       description: Motion sensor (or group of motion sensors) in the room.
+      default: none
       selector:
         entity:
           domain: binary_sensor
@@ -41,6 +42,7 @@ blueprint:
     door_sensors:
       name: Door Sensor(s)
       description: Door sensor (or group of door sensors) for the room.
+      default: none
       selector:
         entity:
           domain: binary_sensor
@@ -55,6 +57,7 @@ blueprint:
     media_players:
       name: Media Player(s)
       description: List of media player entities in room (comma separated).
+      default: none
       selector:
         entity:
           domain: media_player
@@ -74,6 +77,7 @@ blueprint:
     presence_entities:
       name: Presence Entity or Entities
       description: Room presence entity or entities (comma separated) to track.
+      default: none
       selector:
         entity:
           domain: sensor
