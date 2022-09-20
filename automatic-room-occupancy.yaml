@@ -24,28 +24,30 @@ blueprint:
       default: true
       selector:
         boolean:
-    motion_sensor:
+    motion_sensors:
       name: Motion Sensor(s)
       description: Motion sensor (or group of motion sensors) in the room.
-      default: binary_sensor.none
+      default: none
       selector:
         entity:
           domain: binary_sensor
           device_class: motion
+          multiple: true
     occupied_on_shut_door:
       name: Enable Door Occupancy
       description: Turn on/off occupancy via door sensor(s).
       default: false
       selector:
         boolean:
-    door_sensor:
+    door_sensors:
       name: Door Sensor(s)
       description: Door sensor (or group of door sensors) for the room.
-      default: binary_sensor.none
+      default: none
       selector:
         entity:
           domain: binary_sensor
           device_class: opening
+          multiple: true
     occupied_on_media_enabled:
       name: Enable Media Occupancy
       description: Turn on/off occupancy via media player(s).
@@ -55,10 +57,11 @@ blueprint:
     media_players:
       name: Media Player(s)
       description: List of media player entities in room (comma separated).
-      default: media_player.none
+      default: none
       selector:
         entity:
           domain: media_player
+          multiple: true
     media_states:
       name: Media State(s)
       description: Media player state(s) when room is occupied (comma separated).
@@ -74,9 +77,11 @@ blueprint:
     presence_entities:
       name: Presence Entity or Entities
       description: Room presence entity or entities (comma separated) to track.
-      default: sensor.none
+      default: none
       selector:
-        text:
+        entity:
+          domain: sensor
+          multiple: true
     presence_states:
       name: Presence State(s)
       description: A comma separated list of states that presence entity can match.
@@ -91,7 +96,7 @@ blueprint:
         entity:
           domain: input_boolean
     household_group:
-      name: Household Group (Optional)
+      name: Household Group
       description: A grouped set of people in your house. Logic will only run if home.
       default: group.household
       selector:
@@ -116,38 +121,35 @@ blueprint:
   source_url: https://github.com/kreene1987/automatic-room-occupancy/blob/main/automatic-room-occupancy.yaml
 variables:
   time_now: "{{ as_timestamp(now()) }}"
-  media_players_str: !input "media_players"
-  media_players: "{{ media_players_str.split(',') | map('trim') | list }}"
-  media_states_str: !input "media_states"
-  media_states: "{{ media_states_str.split(',') | map('trim') | list }}"
+  media_players: !input "media_players"
+  media_states: !input "media_states"
   media_timeout: "{{ states('input_number.media_occupancy_timeout') | int(10) }}"
   media_is_playing:
     "{{ expand(media_players) | selectattr('state','in', media_states)
     | list | count > 0 }}"
-  presence_entities_str: !input "presence_entities"
-  presence_entities: "{{ presence_entities_str.split(',') | map('trim') | list
-    }}"
-  presence_states_str: !input "presence_states"
-  presence_states: "{{ presence_states_str.split(',') | map('trim') | list }}"
+  presence_entities: !input "presence_entities"
+  presence_states: !input "presence_states"
   presence_timeout:
     "{{ states('input_number.bluetooth_occupancy_timeout') | int(10)
     }}"
   in_room:
     "{{ expand(presence_entities) | selectattr('state','in', presence_states)
     | list | count > 0 }}"
-  motion_sensor: !input "motion_sensor"
+  motion_sensors: !input "motion_sensors"
   motion_timeout:
     "{{ states('input_number.motion_occupancy_timeout') | float(10)
     }}"
   motion_last_changed:
-    "{{ states[motion_sensor].last_changed.timestamp() | float(0)
+    "{{ states[motion_sensors].last_changed.timestamp() | float(0)
     }}"
   motion_is_timed_out:
     "{{ (time_now - motion_last_changed) > (motion_timeout * 60)
     }}"
-  is_motion: "{{ is_state(motion_sensor, 'on') }}"
-  door_sensor: !input "door_sensor"
-  door_shut: "{{ is_state(door_sensor, 'off') }}"
+  is_motion: "{{ expand(motion_sensors) | selectattr('state','eq', 'on')
+    | list | count > 0 }}"
+  door_sensors: !input "door_sensors"
+  door_shut:     "{{ expand(door_sensors) | selectattr('state','eq', 'off')
+    | list | count > 0 }}"
   occupied_on_motion_enabled: !input "occupied_on_motion_enabled"
   occupied_on_shut_door_enabled: !input "occupied_on_shut_door"
   occupied_on_media_enabled: !input "occupied_on_media_enabled"
@@ -167,18 +169,18 @@ variables:
 mode: parallel
 trigger:
   - platform: state
-    entity_id: !input "door_sensor"
+    entity_id: !input "door_sensors"
     to: "off"
   - platform: state
-    entity_id: !input "door_sensor"
+    entity_id: !input "door_sensors"
     to: "on"
     for:
       minutes: "{{ states('input_number.door_occupancy_timeout') | int(0) }}"
   - platform: state
-    entity_id: !input "motion_sensor"
+    entity_id: !input "motion_sensors"
     to: "on"
   - platform: state
-    entity_id: !input "motion_sensor"
+    entity_id: !input "motion_sensors"
     to: "off"
     for:
       minutes: "{{ states('input_number.motion_occupancy_timeout') | int(10) }}"
