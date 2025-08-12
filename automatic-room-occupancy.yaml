@@ -45,7 +45,10 @@ blueprint:
       selector:
         entity:
           domain: binary_sensor
-          device_class: opening
+          device_class: 
+            - opening
+            - door
+            - garage_door
     occupied_on_media_enabled:
       name: Enable Media Occupancy
       description: Turn on/off occupancy via media player(s).
